@@ -1,7 +1,7 @@
 require 'net/http'
 require 'uri'
 
-module Pipedream
+module Hookbin
   class SendMessage
     def self.create(user)
       uri = URI('https://hookb.in/r1aDoYjnnViqk2XXBVeX')

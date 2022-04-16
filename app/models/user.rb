@@ -2,7 +2,7 @@ class User < ApplicationRecord
 
   def send_message
     
-    Pipedream::Send.create(self)
+    Hookbin::Send.create(self)
     
   end
   
