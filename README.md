@@ -1,14 +1,10 @@
 # README
 
-Simple API to create or delete users only:
-- POST /user
-- DELETE /user
- User has a first name and last name, birthday date and location (locations could be in any
-format of your choice)
- The system needs to send the following message at 9am on users’ local time via call to
-https://hookbin.com endpoint (create a new one for yourself): “Hey, {full_name} it’s your
-birthday”
- The system needs to be able to recover and send all unsent messages if the service was
-down for a period of time (say a day).
+## User
+  User has `first_name`, `last_name`, `birthday_date` and `location`. Location of the user is using ActiveSupport::TimeZone location format. If the location inputted at the time of user creation request doesn't have any matching value from ActiveSupport::TimeZone, the response would have status `422` and will return list of supported location format.
 
-# User
+## Notification
+  Storing all notification(message) to cater future messages
+
+## How it Works
+Everyday at 1am, the scheduler (using `whenever` gem) will run the `prepare_birthday_message` method from User model. In that method, there will be a query listing all user having birthday at the next day (Not at the same day to make sure there are no time zone difference problem). If there are no user listed, then the scheduler is completed. If there are some user, then the method will enqueue a job to the `send_message_job` that will run by tomorrow at 9 in user local time.
